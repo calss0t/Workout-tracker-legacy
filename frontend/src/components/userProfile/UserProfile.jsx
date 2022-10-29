@@ -6,9 +6,7 @@ import { styled } from '@mui/material/styles';
 import { Button } from '@mui/material';
 import WeekView from '../WeekView';
 import ProfileUpdate from '../ProfileUpdate'
-import { utils } from "../../utils"
 
-const API = utils.API_URL || 'https://workout-tracker-api.onrender.com';
 
 const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
@@ -36,7 +34,7 @@ export default function UserProfile({ setDisplayProfile, setView }) {
   useEffect(() => {
     (async () => {
       const rawResponse = await fetch(
-        `${API}/user/${localStorage.getItem('userid')}`,
+        `/user/${localStorage.getItem('userid')}`,
         {
           method: 'GET',
           headers: {

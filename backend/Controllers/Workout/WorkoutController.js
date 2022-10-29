@@ -12,7 +12,7 @@ const WorkoutController = {
         return;
       }
 
-      const data = await knex("workout").select("*").where({ user_id: userid });
+      const data = await knex("workout").select("*").where({ users_id: userid });
       console.log(data);
 
       if (data.length > 0) {

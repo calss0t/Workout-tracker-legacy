@@ -8,9 +8,7 @@ import DayView from './dayView/DayView';
 import { Button } from '@mui/material';
 import WorkoutUpdate from './WorkoutUpdate';
 
-import { utils } from '../utils';
 
-const API = utils.API_URL || 'http://localhost:8080';
 
 // The most straitforward way of doing this I've been able to find.
 const daysOfTheWeek = [
@@ -51,7 +49,7 @@ export default function WeekView({ setView }) {
   useEffect(() => {
     (async () => {
       const rawResponse = await fetch(
-        `${API}/workout/${localStorage.getItem('userid')}`,
+        `/workout/${localStorage.getItem('userid')}`,
         {
           method: 'GET',
           headers: {

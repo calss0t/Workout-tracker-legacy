@@ -5,9 +5,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import DayView from './dayView/DayView';
-import { utils } from '../utils';
 
-const API = utils.API_URL;
 const style = {
   position: 'absolute',
   top: '50%',
@@ -58,7 +56,7 @@ export default function ExerciseModal({
   function submit() {
     const data = { name, sets, reps, break_time: breakTime };
     (async () => {
-      const rawResponse = await fetch(`${API}/exercise/${exerciseId}`, {
+      const rawResponse = await fetch(`/exercise/${exerciseId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

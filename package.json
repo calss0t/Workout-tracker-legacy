@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npx nodemon backend/app.js",
-    "migrate-lastest": "npx knex migrate:latest --knexfile db/knexfile.js",
-    "seed-data": "npx knex seed:run --knexfile db/knexfile.js",
+    "migrate-lastest": "npx knex migrate:latest --knexfile backend/db/knexfile.js",
+    "seed-data": "npx knex seed:run --knexfile backend/db/knexfile.js",
     "build": "npm install && npm run migrate-latest && npm run seed-data && cd frontend && npm install && npm run build"
   },
   "author": "",

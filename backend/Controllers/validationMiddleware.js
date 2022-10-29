@@ -39,7 +39,7 @@ const validatePostUser = async (req, res, next) => {
     errorMessage.push(ERROR_MSGS.INVALID_EMAIL);
   }
 
-  const data = await knex.select("*").from("user").where({ email: email });
+  const data = await knex.select("*").from("users").where({ email: email });
   if (data.length > 0) {
     errorMessage.push(ERROR_MSGS.EMAIL_IN_USE);
   }
@@ -161,7 +161,7 @@ const validatePutUser = async (req, res, next) => {
   if (weight) {
     !Number(weight) ? errorMessage.push(ERROR_MSGS.INVALID_INPUT) : null;
   }
-  const data = await knex("user").select("*").where({ id: userid });
+  const data = await knex("users").select("*").where({ id: userid });
   if (data.length <= 0) errorMessage.push(ERROR_MSGS.NOT_FOUND);
 
   if (errorMessage.length > 0) {

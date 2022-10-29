@@ -10,8 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import WeekView from '../WeekView';
 import ExerciseModal from '../ExerciseModal';
-import { utils } from '../../utils'
-const API = utils.API_URL;
+
 
 export default function DayView({ setView, workoutId }) {
 
@@ -20,7 +19,7 @@ export default function DayView({ setView, workoutId }) {
   useEffect(() => {
     (async () => {
       const rawResponse = await fetch(
-        `${API}/exercise/${workoutId}`,
+        `/exercise/${workoutId}`,
         {
           method: 'GET',
           headers: {

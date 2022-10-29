@@ -4,9 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import WeekView from './WeekView';
-import { utils } from '../utils';
 
-const API = utils.API_URL || 'http://localhost:8080';
 
 const style = {
   position: 'absolute',
@@ -33,7 +31,7 @@ export default function ProfileUpdate({ setView, initName, workoutid }) {
   function submit() {
     const data = { name };
     (async () => {
-      const rawResponse = await fetch(`${API}/workout/${workoutid}`, {
+      const rawResponse = await fetch(`/workout/${workoutid}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

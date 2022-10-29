@@ -15,7 +15,7 @@ const UserController = {
         return;
       }
 
-      const data = await knex("user").select("*").where({ id: userid });
+      const data = await knex("users").select("*").where({ id: userid });
       console.log(data);
 
       if (data.length > 0) {
@@ -40,7 +40,7 @@ const UserController = {
 
       const data = await knex
         .select("*")
-        .from("user")
+        .from("users")
         .where({ email: email, password: password });
       console.log(data);
 
@@ -79,7 +79,7 @@ const UserController = {
           weight: weight,
         },
       ];
-      const data = await knex("user").returning(["id"]).insert(newUser);
+      const data = await knex("users").returning(["id"]).insert(newUser);
       console.log(data);
 
       const token = jwt.sign(
@@ -107,7 +107,7 @@ const UserController = {
         return;
       }
 
-      const data = await knex("user")
+      const data = await knex("users")
         .where({ id: userid })
         .update({
           first_name: firstName,

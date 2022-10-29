@@ -9,7 +9,7 @@ module.exports = {
       directory: "./migrations"
     },
     seeds: {
-        directory: "./seed"
+        directory: "./seeds"
       }
   },
 
@@ -24,7 +24,7 @@ module.exports = {
         directory: "./data/migrations"
     },
     seeds: {
-        directory: "./data/seed"
+        directory: "./data/seeds"
     }
   }
 

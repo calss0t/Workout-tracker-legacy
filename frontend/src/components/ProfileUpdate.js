@@ -4,9 +4,7 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import UserProfile from './userProfile/UserProfile';
-import { utils } from '../utils';
 
-const API = utils.API_URL || 'http://localhost:8080';
 
 const style = {
   position: 'absolute',
@@ -61,7 +59,7 @@ export default function ProfileUpdate({
     const data = { firstName, lastName, height, weight };
     (async () => {
       const rawResponse = await fetch(
-        `${API}/user/${localStorage.getItem('userid')}`,
+        `/user/${localStorage.getItem('userid')}`,
         {
           method: 'PUT',
           headers: {

@@ -7,7 +7,7 @@ exports.up = function (knex) {
 		table.increments("id").unsigned().primary();
 		table.string("name", 255);
 		table.integer("day_of_week", 7).checkBetween([0, 6]);
-		table.integer("user_id").references("id").inTable("user");
+		table.integer("users_id").references("id").inTable("users");
 	});
 };
 

@@ -5,9 +5,7 @@ import Modal from '@mui/material/Modal';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
 import WeekView from './WeekView';
-import { utils } from '../utils';
 
-const API = utils.API_URL || 'http://localhost:8080';
 
 const style = {
   position: 'absolute',
@@ -64,7 +62,7 @@ export default function SignupModal({ setView }) {
     if (isEmail(email)) {
       const data = { email, password, firstName, lastName, height, weight };
       (async () => {
-        const rawResponse = await fetch(`${API}/user/signup`, {
+        const rawResponse = await fetch(`/user/signup`, {
           method: 'POST',
           mode: 'cors',
           headers: {
