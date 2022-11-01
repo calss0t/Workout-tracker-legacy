@@ -9,10 +9,11 @@ const verifyToken = (req, res, next) => {
   if (authHeader !== undefined) {
     if (authHeader.split(" ")[0] === "Bearer") {
       try {
+        // console.log(token)
         const token = jwt.verify(
           authHeader.split(" ")[1],
           process.env.JWT_SECRET || "my_secret"
-        );
+          );
         if (Date.now() < token.exp * 1000) {
           console.log(token);
           next();
@@ -20,7 +21,8 @@ const verifyToken = (req, res, next) => {
           res.status(401).json({ error: ERROR_MSGS.UNAUTHORIZED });
         }
       } catch (e) {
-        console.log(e.message);
+        console.log("😂",e);
+        console.log("😂",e.message);
         res.status(401).json({ error: e.message });
       }
     } else {
