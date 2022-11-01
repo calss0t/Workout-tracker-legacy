@@ -10,6 +10,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import WeekView from '../WeekView';
 import ExerciseModal from '../ExerciseModal';
+import Calendar from '../Calendar';
 
 
 export default function DayView({ setView, workoutId }) {
@@ -78,6 +79,7 @@ export default function DayView({ setView, workoutId }) {
       <Button onClick={() => {
         setView(<WeekView setView={setView}></WeekView>)
       }}>Week View</Button>
+      <Calendar/>
     </Fragment >
   );
 }
