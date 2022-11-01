@@ -10,5 +10,6 @@ router.use("/", verifyToken, (req, res, next) => {
   next();
 });
 router.put("/:workoutid", validatePutWorkout, workout_ctrl.putWorkout);
-router.get("/:userid", workout_ctrl.getWorkouts);
+router.post("/:userid/:date", workout_ctrl.postWorkout);
+router.get("/:userid/:date", workout_ctrl.getWorkouts);
 module.exports = router;
