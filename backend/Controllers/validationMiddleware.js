@@ -14,7 +14,7 @@ const verifyToken = (req, res, next) => {
           authHeader.split(" ")[1],
           process.env.JWT_SECRET || "my_secret"
           );
-        if (Date.now() < token.exp * 1000000000) {
+        if (Date.now() < token.exp * 1000) {
           console.log(token);
           next();
         } else {
