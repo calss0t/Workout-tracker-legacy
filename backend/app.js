@@ -7,6 +7,7 @@ const defaultRoutes = require("./Routes/DefaultRoutes");
 const userRoutes = require("./Routes/User/UserRoutes");
 const workoutRoutes = require("./Routes/Workout/WorkoutRoutes");
 const exerciseRoutes = require("./Routes/Exercise/ExerciseRoutes");
+const testingRoutes = require("./Routes/testingRoutes");
 
 const PORT = process.env.PORT | 8080;
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use("/", defaultRoutes);
 app.use(`/user`, userRoutes);
 app.use(`/workout`, workoutRoutes);
 app.use(`/exercise`, exerciseRoutes);
+app.use(`/testing`, testingRoutes);
 
 // Not found handling
 app.use((req, res, next) => {
@@ -48,3 +50,34 @@ app.listen(PORT, (error) => {
     console.log("Error occurred, server can't start", error);
   }
 });
+
+/* exercise API 
+GET /api/v2/exercise/
+
+(results is the key to the array of results)
+"results": [
+  {
+      "id": 345,
+      "uuid": "c788d643-150a-4ac7-97ef-84643c6419bf",
+      "name": "2 Handed Kettlebell Swing",
+      "exercise_base": 9,
+      "description": "Two Handed Russian Style Kettlebell swing",
+      "creation_date": "2015-08-03",
+      "category": 10,
+      "muscles": [],
+      "muscles_secondary": [],
+      "equipment": [
+          10
+      ],
+      "language": 2,
+      "license": 2,
+      "license_author": "deusinvictus",
+      "variations": [
+          345,
+          249
+      ],
+      "author_history": [
+          "deusinvictus"
+      ]
+  },
+*/
