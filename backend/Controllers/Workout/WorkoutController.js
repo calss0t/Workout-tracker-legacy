@@ -26,19 +26,21 @@ const WorkoutController = {
   },
   putWorkout: async (req, res) => {
     try {
-      const { workoutid } = req.params;
+      // const { workoutid } = req.params;
+      const { userid, date } = req.params;
       const { name, dayOfWeek } = req.body;
-      console.log("workoutid",workoutid);
-      if (workoutid === undefined) {
+      // console.log("workoutid",workoutid);
+
+      if (userid === undefined || date === undefined) {
         res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
         return;
       }
-      //should it be insert as it's a new workout from a new user
 
       const data = await knex("workout")
-        .where({ id: workoutid })
+        .where({ users_id: userid, date: date })
         .update({ name: name, day_of_week: dayOfWeek })
-        .returning("*");
+        .returning("*")
+
       console.log("workoutupdate?",data);
 
       if (data.length > 0) {
@@ -55,17 +57,11 @@ const WorkoutController = {
     try {
       const { userid, date } = req.params;
       const { name, dayOfWeek } = req.body;
-      console.log("🤬")
-      // console.log("workoutid",workoutid);
-      // if (workoutid === undefined) {
-      //   res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
-      //   return;
-      // }
+      // solved: body = "name", "dayOfWeek"
 
       const data = await knex("workout")
         .insert({ name: name, day_of_week: dayOfWeek, users_id: userid, date: date })
         .returning("*");
-      console.log("workoutupdate?",data);
 
       if (data.length > 0) {
         res.status(200).json(data);
@@ -76,7 +72,7 @@ const WorkoutController = {
       console.log(error);
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
-  }
+  },
 };
 
 module.exports = WorkoutController;
