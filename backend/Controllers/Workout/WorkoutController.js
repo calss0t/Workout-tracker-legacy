@@ -6,6 +6,7 @@ const WorkoutController = {
   getWorkouts: async (req, res) => {
     try {
       const { userid, date } = req.params;
+      console.log("userID ", userid, "  date ", date)
       console.log(userid);
       if (userid === undefined) {
         res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
@@ -13,8 +14,6 @@ const WorkoutController = {
       }
 
       const data = await knex("workout").select("*").where({ users_id: userid, date:date });
-      console.log("workout data",data);
-
       if (data.length > 0) {
         res.status(200).json(data);
         return;
