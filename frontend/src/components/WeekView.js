@@ -43,8 +43,17 @@ const tempWeekViewArr = [
   { name: '', dayOfWeek: 6 },
 ];
 
-export default function WeekView({ setView }) {
+export default function WeekView({ setView}) {
+
   const [weekViewArr, setWeekViewArr] = useState(tempWeekViewArr);
+
+
+  const today = new Date()
+  const dayOfTheWeek = today.getDay()
+  const getWeekDates = (dayOfTheWeek) => {
+    console.log(dayOfTheWeek)
+  }
+
 
   useEffect(() => {
     (async () => {
@@ -65,6 +74,7 @@ export default function WeekView({ setView }) {
       const content = await rawResponse.json();
       if (Array.isArray(content)) {
         setWeekViewArr(content);
+        console.log(content)
       }
     })();
   }, []);

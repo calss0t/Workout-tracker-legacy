@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import SignupModal from './SignupModal';
 import WeekView from './WeekView';
+import DayView from './dayView/DayView';
 
 
 export default function LoginSignup({ setView }) {
@@ -44,7 +45,7 @@ export default function LoginSignup({ setView }) {
         const content = await rawResponse.json();
         localStorage.setItem('token', content.token);
         localStorage.setItem('userid', content.userid);
-        setView(<WeekView setView={setView}></WeekView>);
+        setView(<DayView setView={setView}></DayView>);
       })();
     } else {
       alert('invalid email');

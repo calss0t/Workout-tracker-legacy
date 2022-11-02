@@ -15,14 +15,11 @@ const verifyToken = (req, res, next) => {
           process.env.JWT_SECRET || "my_secret"
           );
         if (Date.now() < token.exp * 1000) {
-          console.log(token);
           next();
         } else {
           res.status(401).json({ error: ERROR_MSGS.UNAUTHORIZED });
         }
       } catch (e) {
-        console.log("😂",e);
-        console.log("😂",e.message);
         res.status(401).json({ error: e.message });
       }
     } else {
@@ -111,7 +108,6 @@ const validatePutWorkout = async (req, res, next) => {
       ? errorMessage.push(ERROR_MSGS.INVALID_INPUT)
       : null;
   }
-  console.log(Boolean(dayOfWeek));
   if (dayOfWeek) {
     !typeof Number(dayOfWeek)
       ? errorMessage.push(ERROR_MSGS.INVALID_INPUT)
