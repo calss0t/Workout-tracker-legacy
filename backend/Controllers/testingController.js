@@ -231,6 +231,49 @@ const Testing = {
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
   },
+  getExerciseCompletion: async (req, res) => {
+    try {
+      const { workoutid } = req.params;
+
+      if (workoutid === undefined) {
+        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        return;
+      };
+
+      const data = await knex("exercise")
+        .where({ workout_id: workoutid })
+        .select("complete", "id");
+      
+      res.status(200).json(data);
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+    }
+  },
+  putExerciseCompletion: async (req, res) => {
+    try{
+      const { exerciseid } = req.params;
+      const { completion } = req.body;
+
+      if (exerciseid === undefined) {
+        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        return;
+      };
+
+      await knex("exercise")
+        .where({ id: exerciseid })
+        .update({
+          complete: completion
+        });
+      
+      res.status(200).end();
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+    }
+  }
   // new Date("2022-10-29T00:00:00.000Z").toDateString()
   // Wed Nov 02 2022 16:15:21 GMT+0900
 };

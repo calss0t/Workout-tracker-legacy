@@ -62,14 +62,14 @@ const ExerciseController = {
   // pass header "images: true" if you only want exercises with images sent
   fetchExercisesByCategory: (req, res) => {
     const exerciseCategories = {
-      abs: "10",
-      arms: "8",
-      back: "12",
-      calves: "14",
-      cardio: "15",
-      chest: "11",
-      legs: "9",
-      shoulders: "13"
+      Abs: "10",
+      Arms: "8",
+      Back: "12",
+      Calves: "14",
+      Cardio: "15",
+      Chest: "11",
+      Legs: "9",
+      Shoulders: "13"
     }
     try {
       const { category } = req.params;
@@ -117,6 +117,49 @@ const ExerciseController = {
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
   },
+  getExerciseCompletion: async (req, res) => {
+    try {
+      const { workoutid } = req.params;
+
+      if (workoutid === undefined) {
+        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        return;
+      };
+
+      const data = await knex("exercise")
+        .where({ workout_id: workoutid })
+        .select("complete", "id");
+      
+      res.status(200).json(data);
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+    }
+  },
+  putExerciseCompletion: async (req, res) => {
+    try{
+      const { exerciseid } = req.params;
+      const { completion } = req.body;
+
+      if (exerciseid === undefined) {
+        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        return;
+      };
+
+      await knex("exercise")
+        .where({ id: exerciseid })
+        .update({
+          complete: completion
+        });
+      
+      res.status(200).end();
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+    }
+  }
 };
 
 module.exports = ExerciseController;
