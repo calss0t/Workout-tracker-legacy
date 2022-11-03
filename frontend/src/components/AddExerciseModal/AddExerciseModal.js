@@ -26,8 +26,9 @@ const style = {
   pb: 3,
 };
 
-function AddExerciseModal({date}) {
+function AddExerciseModal({date, setRows, workoutId}) {
   const [open, setOpen] = React.useState(false);
+
 
   const [selectedBodyPart, setSelectedBodyPart] = useState(false);
   const [exercises, setExercises] = useState([]);
@@ -150,6 +151,8 @@ function AddExerciseModal({date}) {
       </Modal>
       {selectedBodyPart === true && (
         <ExercisesList
+          setRows={setRows}
+          workoutId={workoutId}
           date={date}
           selectedBodyPart={selectedBodyPart}
           setSelectedBodyPart={setSelectedBodyPart}

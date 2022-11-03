@@ -6,6 +6,8 @@ import {
   DatePicker,
 } from "@material-ui/pickers";
 import { Badge } from "@material-ui/core";
+import DayView from './dayView/DayView';
+
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -29,7 +31,7 @@ function getRandomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 
-function Calendar({ setDate, date }) {
+function Calendar({ setDate, date, setView }) {
   const [selectedDate, handleDateChange] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([1, 2, 15]);
 
@@ -54,12 +56,16 @@ function Calendar({ setDate, date }) {
   };
 
   const SelectDate = (newValue) => {
-    changeDate(newValue);
-    handleDateChange(newValue);
-    console.log(newValue);
-    //setDate(newValue)
     date = new Date(newValue).toDateString();
-    console.log(date);
+    setView(
+      <DayView setView={setView} date={date} ></DayView>
+    );
+    // changeDate(newValue);
+    // handleDateChange(newValue);
+    // console.log(newValue);
+    // //setDate(newValue)
+    // date = new Date(newValue).toDateString();
+    // console.log(date);
     handleClose();
   };
 

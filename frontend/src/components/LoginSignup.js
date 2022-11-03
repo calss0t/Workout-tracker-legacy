@@ -46,9 +46,18 @@ export default function LoginSignup({ setView, date, setDate}) {
           body: JSON.stringify(data),
         });
         const content = await rawResponse.json();
-        localStorage.setItem('token', content.token);
-        localStorage.setItem('userid', content.userid);
-        setView(<DayView date={date} setDate={setDate} setView={setView}></DayView>);
+        console.log(data);
+        console.log(content);
+        if (content.token === undefined ) {
+          alert('invalid username or password')
+        } else {
+          localStorage.setItem('token', content.token);
+          localStorage.setItem('userid', content.userid);
+          setView(<DayView date={date} setDate={setDate} setView={setView}></DayView>);
+        }
+        // localStorage.setItem('token', content.token);
+        // localStorage.setItem('userid', content.userid);
+        // setView(<DayView date={date} setDate={setDate} setView={setView}></DayView>);
       })();
     } else {
       alert('invalid email');
