@@ -27,9 +27,11 @@ export default function DayView({ setView, date, setDate }) {
   };
 
 
-
   useEffect(() => {
     (async () => {
+      if(date === undefined){
+        date = new Date().toDateString()
+      }
       const fetchWorkout = await fetch(
         `/workout/${localStorage.getItem("userid")}/${date}`,
         {
@@ -47,29 +49,38 @@ export default function DayView({ setView, date, setDate }) {
       const workoutJson = await fetchWorkout
         .json()
         .then((result) => {
-          console.log(result)
-          setWorkoutId(result[0].id)
-          return result[0].id;
+          if (result[0] === undefined) {
+            return undefined
+          }
+          else{
+            setWorkoutId(result[0].id)
+            return result[0].id;
+          }
         })
         .then(async (workoutID) => {
-          const rawResponse = await fetch(`/exercise/${workoutID}`, {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "*/*",
-              "Accept-Encoding": "gzip, deflate, br",
-              Connection: "keep-alive",
-              "Content-Length": 123,
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-          });
-          const content = await rawResponse.json();
-          if (Array.isArray(content)) {
-            setRows(content);
+          if (workoutID !== undefined) {
+            const rawResponse = await fetch(`/exercise/${workoutID}`, {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
+                Connection: "keep-alive",
+                "Content-Length": 123,
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            });
+            const content = await rawResponse.json();
+            if (Array.isArray(content)) {
+              setRows(content);
+            }
+          }
+          else{
+            setRows([])
           }
         });
     })();
-  }, [date, AddExerciseModal]);
+  }, [date, rows]);
 
   return (
     <Fragment>
@@ -99,6 +110,7 @@ export default function DayView({ setView, date, setDate }) {
                 </TableCell>
                 <TableCell align="right">
                   <ExerciseModal
+                    setRows={setRows}
                     setView={setView}
                     exerciseId={row.id}
                     workoutId={workoutId}
@@ -120,8 +132,8 @@ export default function DayView({ setView, date, setDate }) {
       >
         Week View
       </Button>
-      <Calendar date={date} workoutId={workoutId} setDate={setDate}/>
-      <AddExerciseModal date={date}/>
+      <Calendar date={date} workoutId={workoutId} setView={setView}/>
+      <AddExerciseModal workoutId={workoutId}  setRows={setRows} date={date}/>
     </Fragment>
   );
 }

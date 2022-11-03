@@ -26,6 +26,7 @@ export default function ExerciseModal({
   initReps,
   initBreak,
   workoutId,
+  setRows
 }) {
   // modal states
   const [open, setOpen] = React.useState(false);
@@ -54,6 +55,7 @@ export default function ExerciseModal({
 
   // form submission
   function submit() {
+    setRows([])
     const data = { name, sets, reps, break_time: breakTime };
     (async () => {
       const rawResponse = await fetch(`/exercise/${exerciseId}`, {

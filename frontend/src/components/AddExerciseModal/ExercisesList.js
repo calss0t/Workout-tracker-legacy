@@ -28,7 +28,7 @@ const style = {
   pb: 3,
 };
 
-function RenderMoreInfo({ card, date, setOpenParent}) {
+function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
   const [open, setOpen] = React.useState(false);
 
   const [sets, setSets] = React.useState("");
@@ -51,6 +51,7 @@ function RenderMoreInfo({ card, date, setOpenParent}) {
   };
 
   function submit() {
+    setRows([])
     const data = { name, sets, reps };
     (async () => {
       const rawResponse = await fetch(`/testing/ex/${localStorage.getItem('userid')}/${date}`, {
@@ -65,7 +66,6 @@ function RenderMoreInfo({ card, date, setOpenParent}) {
         },
         body: JSON.stringify(data),
       });
-      const test = rawResponse.json().then((res)=>console.log(res))
       handleCloseChild();
       setOpenParent(false)
     })();
@@ -131,7 +131,8 @@ function RenderMoreInfo({ card, date, setOpenParent}) {
   );
 }
 
-function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date}) {
+function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date, setRows}) {
+  
   const [open, setOpenParent] = React.useState(false);
 
   React.useEffect(() => {
@@ -175,7 +176,7 @@ function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date}
             {card.exercises[0].description}
           </Typography>
         </CardContent>
-        <RenderMoreInfo setOpenParent={setOpenParent} card={card} date={date}/>
+        <RenderMoreInfo setOpenParent={setOpenParent} card={card} date={date} setRows={setRows}/>
       </Card>
     );
   };

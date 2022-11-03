@@ -7,11 +7,12 @@ import { useState, useEffect } from 'react';
 function App() {
   const [displayProfile, setDisplayProfile] = useState(false);
   const [view, setView] = useState(null);
-  const [date, setDate] = useState(new Date().toDateString())
-
+  const [date, setDate] = useState("")
 
 
   useEffect(() => {
+    const loginDate = new Date().toDateString()
+    setDate(loginDate)
     if (localStorage.getItem('userid')) {
       setView(<WeekView setView={setView}></WeekView>);
     } else {
