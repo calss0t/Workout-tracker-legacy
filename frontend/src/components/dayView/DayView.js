@@ -12,6 +12,18 @@ import WeekView from '../WeekView';
 import ExerciseModal from '../ExerciseModal';
 import Calendar from '../Calendar';
 
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+
+import Box from '@mui/material/Box';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+
 
 export default function DayView({ setView, workoutId }) {
 
@@ -39,6 +51,24 @@ export default function DayView({ setView, workoutId }) {
       }
     })();
   }, []);
+  
+  const [open, setOpen] = React.useState(false);
+  const [menu, setMenu] = React.useState('');
+
+  const menuHandleChange = (event) => {
+    setMenu(Number(event.target.value) || '');
+  };
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (event, reason) => {
+    if (reason !== 'backdropClick') {
+      setOpen(false);
+    }
+  };
+
 
   return (
     <Fragment>
@@ -80,6 +110,41 @@ export default function DayView({ setView, workoutId }) {
         setView(<WeekView setView={setView}></WeekView>)
       }}>Week View</Button>
       <Calendar/>
-    </Fragment >
+
+      <Button onClick={handleClickOpen}>Choose workout</Button>
+        <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
+          <DialogTitle>Slecet a workout</DialogTitle>
+          <DialogContent>
+            <Box component="form" sx={{ display: 'flex', flexWrap: 'wrap' }}>
+              <FormControl sx={{ m: 1, minWidth: 120 }}>
+                <InputLabel id="demo-dialog-select-label">Menu</InputLabel>
+                <Select
+                  labelId="demo-dialog-select-label"
+                  id="demo-dialog-select"
+                  value={menu}
+                  onChange={menuHandleChange}
+                  input={<OutlinedInput label="menu" />}
+                >
+                  <MenuItem value="">
+                    <em>None</em>
+                  </MenuItem>
+                  <MenuItem value={1}>abs</MenuItem>
+                  <MenuItem value={2}>arms</MenuItem>
+                  <MenuItem value={3}>back</MenuItem>
+                  <MenuItem value={4}>calves</MenuItem>
+                  <MenuItem value={5}>cardio</MenuItem>
+                  <MenuItem value={6}>chest</MenuItem>
+                  <MenuItem value={7}>legs</MenuItem>
+                  <MenuItem value={8}>shoulder</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={handleClose}>Ok</Button>
+          </DialogActions>
+        </Dialog>
+      </Fragment >
   );
 }
