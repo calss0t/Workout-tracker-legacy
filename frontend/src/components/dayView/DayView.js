@@ -11,9 +11,12 @@ import Paper from "@mui/material/Paper";
 import WeekView from "../WeekView";
 import ExerciseModal from "../ExerciseModal";
 import Calendar from "../Calendar";
+import AddExerciseModal from "../AddExerciseModal/AddExerciseModal.js";
 
-export default function DayView({ setView, workoutId }) {
+export default function DayView({ setView, date, setDate }) {
   const [rows, setRows] = useState([{ name: "", sets: "", reps: "" }]);
+
+  const [workoutId, setWorkoutId] = useState()
 
   const addDone = (e) => {
     if (e.target.checked === true) {
@@ -23,11 +26,12 @@ export default function DayView({ setView, workoutId }) {
     }
   };
 
-  const today = new Date();
+
+
   useEffect(() => {
     (async () => {
       const fetchWorkout = await fetch(
-        `/workout/${localStorage.getItem("userid")}/${today.toDateString()}`,
+        `/workout/${localStorage.getItem("userid")}/${date}`,
         {
           method: "GET",
           headers: {
@@ -43,6 +47,8 @@ export default function DayView({ setView, workoutId }) {
       const workoutJson = await fetchWorkout
         .json()
         .then((result) => {
+          console.log(result)
+          setWorkoutId(result[0].id)
           return result[0].id;
         })
         .then(async (workoutID) => {
@@ -63,7 +69,7 @@ export default function DayView({ setView, workoutId }) {
           }
         });
     })();
-  }, []);
+  }, [date, AddExerciseModal]);
 
   return (
     <Fragment>
@@ -109,12 +115,13 @@ export default function DayView({ setView, workoutId }) {
       </TableContainer>
       <Button
         onClick={() => {
-          setView(<WeekView setView={setView}></WeekView>);
+          setView(<WeekView date={date} setView={setView}></WeekView>);
         }}
       >
         Week View
       </Button>
-      <Calendar />
+      <Calendar date={date} workoutId={workoutId} setDate={setDate}/>
+      <AddExerciseModal date={date}/>
     </Fragment>
   );
 }

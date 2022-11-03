@@ -1,37 +1,39 @@
 import React, { Fragment, useState } from "react";
-import DateFnsUtils from '@date-io/date-fns';
-import { DateTimePicker, MuiPickersUtilsProvider, DatePicker  } from "@material-ui/pickers";
+import DateFnsUtils from "@date-io/date-fns";
+import {
+  DateTimePicker,
+  MuiPickersUtilsProvider,
+  DatePicker,
+} from "@material-ui/pickers";
 import { Badge } from "@material-ui/core";
 
-
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Modal from '@mui/material/Modal';
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Modal from "@mui/material/Modal";
 
 const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 300,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
-    boxShadow: 24,
-    pt: 2,
-    px: 4,
-    pb: 3,
-  };
+  position: "absolute",
+  top: "50%",
+  left: "50%",
+  transform: "translate(-50%, -50%)",
+  width: 300,
+  bgcolor: "background.paper",
+  border: "2px solid #000",
+  boxShadow: 24,
+  pt: 2,
+  px: 4,
+  pb: 3,
+};
 
-  function getRandomNumber(min, max) {
-    return Math.round(Math.random() * (max - min) + min);
-  }
+function getRandomNumber(min, max) {
+  return Math.round(Math.random() * (max - min) + min);
+}
 
-function Calendar() {
-    const [selectedDate, handleDateChange] = useState(new Date());
-    const [selectedDays, setSelectedDays] = useState([1, 2, 15]);
+function Calendar({ setDate, date }) {
+  const [selectedDate, handleDateChange] = useState(new Date());
+  const [selectedDays, setSelectedDays] = useState([1, 2, 15]);
 
-
-  const [date, changeDate] = useState(new Date());
+  const [dateToday, changeDate] = useState(new Date());
 
   const [open, setOpen] = React.useState(false);
   const handleOpen = () => {
@@ -43,7 +45,7 @@ function Calendar() {
 
   const handleMonthChange = async () => {
     // just select random days to simulate server side based data
-    return new Promise(resolve => {
+    return new Promise((resolve) => {
       setTimeout(() => {
         setSelectedDays([1, 2, 3].map(() => getRandomNumber(1, 28)));
         resolve();
@@ -51,35 +53,56 @@ function Calendar() {
     });
   };
 
+  const SelectDate = (newValue) => {
+    changeDate(newValue);
+    handleDateChange(newValue);
+    console.log(newValue);
+    //setDate(newValue)
+    date = new Date(newValue).toDateString();
+    console.log(date);
+    handleClose();
+  };
 
   return (
-<>
-    <Button onClick={handleOpen}>Open calendar</Button>
-    <Modal
+    <>
+      <Button onClick={handleOpen}>Open calendar</Button>
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
-    >
+      >
         <Box sx={style}>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <DatePicker
-                autoOk
-                //orientation="landscape"
-                variant="static"
-                openTo="date"
-                value={date}
-                onChange={(newValue)=> {changeDate(newValue); handleDateChange(newValue); console.log(newValue)}}
-                renderDay={(day, selectedDate, isInCurrentMonth, dayComponent) => {
-                    const isSelected = isInCurrentMonth && selectedDays.includes(day.getDate());
-                    return <Badge badgeContent={isSelected ? "🌚" : undefined}>{dayComponent}</Badge>;
-                  }}
-                onMonthChange={handleMonthChange}
+              autoOk
+              //orientation="landscape"
+              variant="static"
+              openTo="date"
+              value={dateToday}
+              onChange={(newValue) => {
+                SelectDate(newValue);
+              }}
+              renderDay={(
+                day,
+                selectedDate,
+                isInCurrentMonth,
+                dayComponent
+              ) => {
+                const isSelected =
+                  isInCurrentMonth && selectedDays.includes(day.getDate());
+                return (
+                  <Badge badgeContent={isSelected ? "🌚" : undefined}>
+                    {dayComponent}
+                  </Badge>
+                );
+              }}
+              onMonthChange={handleMonthChange}
             />
-            </MuiPickersUtilsProvider>
+          </MuiPickersUtilsProvider>
         </Box>
-    </Modal>
-</>
+      </Modal>
+    </>
   );
 }
 

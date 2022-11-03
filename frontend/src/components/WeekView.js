@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import DayView from './dayView/DayView';
-import { Button } from '@mui/material';
+import { Button, unstable_composeClasses } from '@mui/material';
 import WorkoutUpdate from './WorkoutUpdate';
 
 
@@ -43,41 +43,73 @@ const tempWeekViewArr = [
   { name: '', dayOfWeek: 6 },
 ];
 
-export default function WeekView({ setView}) {
+export default function WeekView({ setView, date}) {
 
   const [weekViewArr, setWeekViewArr] = useState(tempWeekViewArr);
+  const [weekDates, setWeekDates] = useState([])
 
 
-  const today = new Date()
-  const dayOfTheWeek = today.getDay()
-  const getWeekDates = (dayOfTheWeek) => {
-    console.log(dayOfTheWeek)
-  }
-
-
-  useEffect(() => {
-    (async () => {
-      const rawResponse = await fetch(
-        `/workout/${localStorage.getItem('userid')}`,
+  
+  useEffect(()=>{
+    const dayOfTheWeek = new Date().getDay()
+    const getWeekDates  = (dayOfTheWeek) => {
+      const result = []
+      for(let i = 0 ; i < dayOfTheWeek; i++) {
+        var todayDate = new Date()
+        todayDate.setDate(todayDate.getDate() - i)
+        result.unshift(todayDate)
+      } 
+      for (let i = 1; i <= (7-dayOfTheWeek); i++){
+        var todayDate = new Date()
+        todayDate.setDate(todayDate.getDate() + i)
+        result.push(todayDate)
+      }
+      return result
+    }
+    
+    const arrayFetchURL = getWeekDates(dayOfTheWeek).map((element) => {
+      return fetch(
+        `/workout/${localStorage.getItem("userid")}/${element.toDateString()}`,
         {
-          method: 'GET',
+          method: "GET",
           headers: {
-            'Content-Type': 'application/json',
-            Accept: '*/*',
-            'Accept-Encoding': 'gzip, deflate, br',
-            Connection: 'keep-alive',
-            'Content-Length': 123,
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            Connection: "keep-alive",
+            "Content-Length": 123,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
         }
       );
-      const content = await rawResponse.json();
-      if (Array.isArray(content)) {
-        setWeekViewArr(content);
-        console.log(content)
+    })
+    Promise.all(arrayFetchURL)
+    .then(async ([mon,tue,wed,thu,fri,sat,sun]) => {
+      const result = []
+      await mon.json().then((res) => result.push(res[0]))
+      await tue.json().then((res) => result.push(res[0]))
+      await wed.json().then((res) => result.push(res[0]))
+      await thu.json().then((res) => result.push(res[0]))
+      await fri.json().then((res) => result.push(res[0]))
+      await sat.json().then((res) => result.push(res[0]))
+      await sun.json().then((res) => result.push(res[0]))
+      return result
+    })
+    .then((res) => {
+      setWeekDates(getWeekDates(dayOfTheWeek)) 
+      setWeekViewArr(res)
+      return res
+    })
+    .then((res) => {
+      for(let i = 0; i<res.length;i++){
+        if(res[i] == undefined){
+          res[i] = {}
+          res[i].name = "No workout yet"
+          res[i].date = new Date(weekDates[i]).toDateString()
+        }
       }
-    })();
-  }, []);
+    })
+  },[weekDates])
 
   return (
     <Box>
@@ -94,12 +126,15 @@ export default function WeekView({ setView}) {
               <Item
                 onClick={() => {
                   setView(
-                    <DayView setView={setView} workoutId={obj.id}></DayView>
+                    <DayView setView={setView} date={obj.date} workoutId={obj.id}></DayView>
                   );
                 }}
-              >{`${daysOfTheWeek[obj.day_of_week] || ''} -  Workout: ${
+              >
+              {obj.name && obj.date}
+              {/* {`${daysOfTheWeek[obj.day_of_week] || ''} -  Workout: ${
                 obj.name || ''
-              }`}</Item>
+              }`} */}
+              </Item>
               <Button
                 onClick={() => {
                   setView(
