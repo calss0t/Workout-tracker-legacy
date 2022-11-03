@@ -7,7 +7,7 @@
     "start": "cd backend && npx nodemon backend/app.js",
     "migrate:latest": "npx knex migrate:latest --knexfile backend/db/knexfile.js",
     "seed:data": "npx knex seed:run --knexfile backend/db/knexfile.js",
-    "build": "npm install && npm run migrate-latest && npm run seed-data && cd frontend && npm install --force && npm run build"
+    "build": "npm install && npm run migrate-latest && npm run seed-data && cd frontend && npm install && npm run build"
   },
   "author": "",
   "license": "ISC",
