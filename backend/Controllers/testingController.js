@@ -171,24 +171,18 @@ const Testing = {
   },
   getExercises: async (req, res) => {
     try {
-      const { userid, date } = req.params;
-      // console.log(workoutid);
-      if (userid === undefined || date === undefined) {
+      const { workoutid } = req.params;
+      console.log(workoutid);
+      if (workoutid === undefined) {
         res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
         return;
       }
 
-      const workoutId = await knex("workout")
-        .where({ users_id: userid, date: date })
-        .select("id");
-
-      // console.log(workoutId);
-
       const data = await knex("exercise")
         .select("*")
-        .where({ workout_id: workoutId[0].id });
+        .where({ workout_id: workoutid});
 
-      console.log(data);
+      // console.log(data);
 
       if (data.length > 0) {
         res.status(200).json(data);
@@ -231,6 +225,29 @@ const Testing = {
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
   },
+  putExerciseCompletion: async (req, res) => {
+    try{
+      const { exerciseid } = req.params;
+      const { completion } = req.body;
+
+      if (exerciseid === undefined) {
+        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        return;
+      };
+
+      await knex("exercise")
+        .where({ id: exerciseid })
+        .update({
+          complete: completion
+        });
+      
+      res.status(200).end();
+
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+    }
+  }
   // new Date("2022-10-29T00:00:00.000Z").toDateString()
   // Wed Nov 02 2022 16:15:21 GMT+0900
 };
