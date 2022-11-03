@@ -11,7 +11,7 @@ router.use("/", cors(corsOption), (req, res, next) => {
   console.log("Time: ", new Date());
   next();
 });
-// router.get("/", (req, res) => {
-//   res.redirect("https://www.google.com");
-// });
+router.get("/", (req, res) => {
+  res.sendStatus(200)
+});
 module.exports = router;
