@@ -57,59 +57,65 @@ export default function WeekView({ setView, date}) {
       for(let i = 0 ; i < dayOfTheWeek; i++) {
         var todayDate = new Date()
         todayDate.setDate(todayDate.getDate() - i)
-        result.unshift(todayDate)
+        result.unshift(todayDate.toDateString())
       } 
       for (let i = 1; i <= (7-dayOfTheWeek); i++){
         var todayDate = new Date()
         todayDate.setDate(todayDate.getDate() + i)
-        result.push(todayDate)
+        result.push(todayDate.toDateString())
       }
       return result
     }
+
+    const daysArray = getWeekDates(dayOfTheWeek)
+    // daysArray.forEach((element) => {
+    //   element = new Date(element).toDateString()
+    // },)
+    setWeekDates(daysArray)
     
-    const arrayFetchURL = getWeekDates(dayOfTheWeek).map((element) => {
-      return fetch(
-        `/workout/${localStorage.getItem("userid")}/${element.toDateString()}`,
-        {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "*/*",
-            "Accept-Encoding": "gzip, deflate, br",
-            Connection: "keep-alive",
-            "Content-Length": 123,
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        }
-      );
-    })
-    Promise.all(arrayFetchURL)
-    .then(async ([mon,tue,wed,thu,fri,sat,sun]) => {
-      const result = []
-      await mon.json().then((res) => result.push(res[0]))
-      await tue.json().then((res) => result.push(res[0]))
-      await wed.json().then((res) => result.push(res[0]))
-      await thu.json().then((res) => result.push(res[0]))
-      await fri.json().then((res) => result.push(res[0]))
-      await sat.json().then((res) => result.push(res[0]))
-      await sun.json().then((res) => result.push(res[0]))
-      return result
-    })
-    .then((res) => {
-      setWeekDates(getWeekDates(dayOfTheWeek)) 
-      setWeekViewArr(res)
-      return res
-    })
-    .then((res) => {
-      for(let i = 0; i<res.length;i++){
-        if(res[i] == undefined){
-          res[i] = {}
-          res[i].name = "No workout yet"
-          res[i].date = new Date(weekDates[i]).toDateString()
-        }
-      }
-    })
-  },[weekDates])
+    // const arrayFetchURL = getWeekDates(dayOfTheWeek).map((element) => {
+    //   return fetch(
+    //     `/workout/${localStorage.getItem("userid")}/${element.toDateString()}`,
+    //     {
+    //       method: "GET",
+    //       headers: {
+    //         "Content-Type": "application/json",
+    //         Accept: "*/*",
+    //         "Accept-Encoding": "gzip, deflate, br",
+    //         Connection: "keep-alive",
+    //         "Content-Length": 123,
+    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
+    //       },
+    //     }
+    //   );
+    // })
+    // Promise.all(arrayFetchURL)
+    // .then(async ([mon,tue,wed,thu,fri,sat,sun]) => {
+    //   const result = []
+    //   await mon.json().then((res) => result.push(res[0]))
+    //   await tue.json().then((res) => result.push(res[0]))
+    //   await wed.json().then((res) => result.push(res[0]))
+    //   await thu.json().then((res) => result.push(res[0]))
+    //   await fri.json().then((res) => result.push(res[0]))
+    //   await sat.json().then((res) => result.push(res[0]))
+    //   await sun.json().then((res) => result.push(res[0]))
+    //   return result
+    // })
+    // .then((res) => {
+    //   setWeekDates(getWeekDates(dayOfTheWeek)) 
+    //   setWeekViewArr(res)
+    //   return res
+    // })
+    // .then((res) => {
+    //   for(let i = 0; i<res.length;i++){
+    //     if(res[i] == undefined){
+    //       res[i] = {}
+    //       res[i].name = "No workout yet"
+    //       res[i].date = new Date(weekDates[i]).toDateString()
+    //     }
+    //   }
+    // })
+  },[])
 
   return (
     <Box>
@@ -118,19 +124,20 @@ export default function WeekView({ setView, date}) {
         justifyContent='center'
         alignItems='center'
         spacing={0.5}
+        marginTop="1rem"
       >
         {/* // TODO add onClick to Item to setView to DayView obj.dayOfWeek */}
-        {weekViewArr.map(obj => {
+        {weekDates.map(obj => {
           return (
             <>
               <Item
                 onClick={() => {
                   setView(
-                    <DayView setView={setView} date={obj.date} workoutId={obj.id}></DayView>
+                    <DayView setView={setView} date={obj}></DayView>
                   );
                 }}
               >
-              {obj.name && obj.date}
+              {obj}
               {/* {`${daysOfTheWeek[obj.day_of_week] || ''} -  Workout: ${
                 obj.name || ''
               }`} */}
