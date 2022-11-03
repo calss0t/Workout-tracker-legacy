@@ -10,6 +10,11 @@ const exerciseRoutes = require("./Routes/Exercise/ExerciseRoutes");
 const testingRoutes = require("./Routes/testingRoutes");
 
 const PORT = process.env.PORT | 8080;
+
+const path = require("path");
+app.use(express.static(path.resolve(__dirname, "../frontend/build")));
+
+
 app.use(express.json());
 app.use(timeout("5s"));
 app.use(cors());
@@ -39,6 +44,14 @@ app.use((error, req, res, next) => {
   res.json({
     message: error.message,
   });
+});
+
+app.get('/', (req, res) => {
+  res.sendStatus(200)
+})
+
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
 });
 
 app.listen(PORT, (error) => {
