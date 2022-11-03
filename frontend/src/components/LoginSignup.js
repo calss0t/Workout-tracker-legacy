@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Stack from '@mui/material/Stack';
@@ -8,15 +8,18 @@ import WeekView from './WeekView';
 import DayView from './dayView/DayView';
 
 
-export default function LoginSignup({ setView }) {
+export default function LoginSignup({ setView, date, setDate}) {
   // email validation regex
   function isEmail(email) {
     return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
   }
 
   // login info states
-  const [email, setEmail] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  //const [date, setDate] = useState(new Date().toDateString())
+
 
   // login info handlers
   function handleEmail(e) {
@@ -45,7 +48,7 @@ export default function LoginSignup({ setView }) {
         const content = await rawResponse.json();
         localStorage.setItem('token', content.token);
         localStorage.setItem('userid', content.userid);
-        setView(<DayView setView={setView}></DayView>);
+        setView(<DayView date={date} setDate={setDate} setView={setView}></DayView>);
       })();
     } else {
       alert('invalid email');

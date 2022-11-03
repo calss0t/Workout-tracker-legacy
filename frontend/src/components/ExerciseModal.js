@@ -110,7 +110,7 @@ export default function ExerciseModal({
               id='breakTime'
               label='Break Time'
               value={breakTime}
-              onChange={handleReps}
+              onChange={handleBreakTime}
             />
             <Button
               onClick={() => {

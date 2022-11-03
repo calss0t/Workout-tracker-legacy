@@ -6,24 +6,16 @@ const { ERROR_MSGS } = require("../../Configs/Constants");
 const ExerciseController = {
   getExercises: async (req, res) => {
     try {
-      const { userid, date } = req.params;
-      // console.log(workoutid);
-      if (userid === undefined || date === undefined) {
+      const { workoutid } = req.params;
+      console.log(workoutid)
+      if (workoutid === undefined) {
         res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
         return;
       }
 
-      const workoutId = await knex("workout")
-        .where({ users_id: userid, date: date })
-        .select("id");
-
-        // console.log(workoutId);
-
       const data = await knex("exercise")
         .select("*")
-        .where({ workout_id: workoutId[0].id });
-
-      console.log(data);
+        .where({ workout_id: workoutid });
 
       if (data.length > 0) {
         res.status(200).json(data);

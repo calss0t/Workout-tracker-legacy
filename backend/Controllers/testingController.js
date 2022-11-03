@@ -3,42 +3,48 @@ const knex = require("../db/index");
 require("dotenv").config();
 const { ERROR_MSGS } = require("../Configs/Constants");
 
+const fetch = (...args) =>
+  import("node-fetch").then(({ default: fetch }) => fetch(...args));
+
 const Testing = {
   // fetches exercises by category (passed in as query string parameter)
   // pass header "images: true" if you only want exercises with images sent
   fetchExercisesByCategory: (req, res) => {
     const exerciseCategories = {
-      abs: "10",
-      arms: "8",
-      back: "12",
-      calves: "14",
-      cardio: "15",
-      chest: "11",
-      legs: "9",
-      shoulders: "13"
-    }
+      Abs: "10",
+      Arms: "8",
+      Back: "12",
+      Calves: "14",
+      Cardio: "15",
+      Chest: "11",
+      Legs: "9",
+      Shoulder: "13",
+    };
     try {
       const { category } = req.params;
       const images = req.get("images");
       let categoryNum = exerciseCategories[category];
-      fetch(`https://wger.de/api/v2/exercisebaseinfo/?language=2&category=${categoryNum}`)
-        .then(res => res.json())
-        .then(res => res.results)
-        .then(arr => {
+      console.log(categoryNum);
+      fetch(
+        `https://wger.de/api/v2/exercisebaseinfo/?language=2&category=${categoryNum}`
+      )
+        .then((res) => res.json())
+        .then((res) => res.results)
+        .then((arr) => {
           if (images) {
-            let arrWithImages = arr.filter(ex => {
+            let arrWithImages = arr.filter((ex) => {
               if (ex.images.length > 0) {
                 return ex;
               }
-            })
-            res.status(200).send(arrWithImages)
+            });
+            res.status(200).send(arrWithImages);
           } else {
-            res.status(200).send(arr)
+            res.status(200).send(arr);
           }
-        })
+        });
     } catch (error) {
       console.log(error);
-      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR})
+      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
   },
   postWorkout: async (req, res) => {
@@ -48,7 +54,12 @@ const Testing = {
       // solved: body = "name", "dayOfWeek"
 
       const data = await knex("workout")
-        .insert({ name: name, day_of_week: dayOfWeek, users_id: userid, date: date })
+        .insert({
+          name: name,
+          day_of_week: dayOfWeek,
+          users_id: userid,
+          date: date,
+        })
         .returning("*");
 
       if (data.length > 0) {
@@ -64,21 +75,67 @@ const Testing = {
   postExercise: async (req, res) => {
     try {
       const { userid, date } = req.params;
-      const { name, sets, reps, breakTime } = req.body;
-      
+      const { name, sets, reps } = req.body;
+
       const workoutId = await knex("workout")
         .where({ users_id: userid, date: date })
         .select("id");
-      
-      const data = await knex("exercise")
-        .insert({ name: name, sets: sets, reps: reps, break_time: breakTime, workout_id: workoutId[0].id })
-        .returning("*");
-            
+
+      if (workoutId[0] !== undefined) {
+        const data = await knex("exercise")
+          .insert({
+            name: name,
+            sets: sets,
+            reps: reps,
+            break_time: "120",
+            workout_id: workoutId[0].id,
+          })
+          .returning("*")
+          .catch(function (error) {
+            console.error(error);
+          });
+
         if (data.length > 0) {
           res.status(200).json(data);
           return;
         }
-      
+      } else {
+        try {
+          const dayOfWeek = new Date(date).getDay();
+          // console.log("workoutid",workoutid);
+
+          const workoutId = await knex("workout")
+            .insert({
+              name: name,
+              day_of_week: dayOfWeek,
+              users_id: userid,
+              date: date,
+            })
+            .returning("id");
+
+          const data = await knex("exercise")
+            .insert({
+              name: name,
+              sets: sets,
+              reps: reps,
+              break_time: "120",
+              workout_id: workoutId[0].id,
+            })
+            .returning("*")
+            .catch(function (error) {
+              console.error(error);
+            });
+
+          if (data.length > 0) {
+            res.status(200).json(data);
+            return;
+          }
+          // res.status(404).json({ message: ERROR_MSGS.NOT_FOUND });
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
+        }
+      }
     } catch (error) {
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
@@ -98,9 +155,9 @@ const Testing = {
       const data = await knex("workout")
         .where({ users_id: userid, date: date })
         .update({ name: name, day_of_week: dayOfWeek })
-        .returning("*")
+        .returning("*");
 
-      console.log("workoutupdate?",data);
+      console.log("workoutupdate?", data);
 
       if (data.length > 0) {
         res.status(200).json(data);
@@ -125,7 +182,7 @@ const Testing = {
         .where({ users_id: userid, date: date })
         .select("id");
 
-        // console.log(workoutId);
+      // console.log(workoutId);
 
       const data = await knex("exercise")
         .select("*")
@@ -176,7 +233,7 @@ const Testing = {
   },
   // new Date("2022-10-29T00:00:00.000Z").toDateString()
   // Wed Nov 02 2022 16:15:21 GMT+0900
-}
+};
 
 module.exports = Testing;
 
