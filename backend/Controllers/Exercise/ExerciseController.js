@@ -117,26 +117,6 @@ const ExerciseController = {
       res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
     }
   },
-  getExerciseCompletion: async (req, res) => {
-    try {
-      const { workoutid } = req.params;
-
-      if (workoutid === undefined) {
-        res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
-        return;
-      };
-
-      const data = await knex("exercise")
-        .where({ workout_id: workoutid })
-        .select("complete", "id");
-      
-      res.status(200).json(data);
-
-    } catch (error) {
-      console.log(error);
-      res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
-    }
-  },
   putExerciseCompletion: async (req, res) => {
     try{
       const { exerciseid } = req.params;

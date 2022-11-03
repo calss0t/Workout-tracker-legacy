@@ -14,7 +14,7 @@ router.get("/:workoutid", exercise_ctrl.getExercises)
 router.post("/:userid/:date", exercise_ctrl.postExercise);
 router.get("/fetchExercisesByCategory/:category", exercise_ctrl.fetchExercisesByCategory)
 
-router.get("/:workoutid", exercise_ctrl.getExerciseCompletion)
+// router.get("/:workoutid", exercise_ctrl.getExerciseCompletion)
 router.put("/complete/:exerciseid", exercise_ctrl.putExerciseCompletion);
-//router.get("/:userid/:date", exercise_ctrl.getExercises);
+
 module.exports = router;
