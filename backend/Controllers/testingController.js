@@ -30,6 +30,13 @@ const Testing = {
       )
         .then((res) => res.json())
         .then((res) => res.results)
+        .then(res => {
+          return res.filter(result => {
+            if (result.exercises[0].language === 2) {
+              return result
+            }
+          })
+        })
         .then((arr) => {
           if (images) {
             let arrWithImages = arr.filter((ex) => {
