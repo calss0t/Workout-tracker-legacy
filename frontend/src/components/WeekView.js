@@ -5,8 +5,7 @@ import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 import DayView from './dayView/DayView';
-import { Button, unstable_composeClasses } from '@mui/material';
-import WorkoutUpdate from './WorkoutUpdate';
+import Calendar from './Calendar';
 
 
 
@@ -66,55 +65,8 @@ export default function WeekView({ setView, date}) {
       }
       return result
     }
-
     const daysArray = getWeekDates(dayOfTheWeek)
-    // daysArray.forEach((element) => {
-    //   element = new Date(element).toDateString()
-    // },)
     setWeekDates(daysArray)
-    
-    // const arrayFetchURL = getWeekDates(dayOfTheWeek).map((element) => {
-    //   return fetch(
-    //     `/workout/${localStorage.getItem("userid")}/${element.toDateString()}`,
-    //     {
-    //       method: "GET",
-    //       headers: {
-    //         "Content-Type": "application/json",
-    //         Accept: "*/*",
-    //         "Accept-Encoding": "gzip, deflate, br",
-    //         Connection: "keep-alive",
-    //         "Content-Length": 123,
-    //         Authorization: `Bearer ${localStorage.getItem("token")}`,
-    //       },
-    //     }
-    //   );
-    // })
-    // Promise.all(arrayFetchURL)
-    // .then(async ([mon,tue,wed,thu,fri,sat,sun]) => {
-    //   const result = []
-    //   await mon.json().then((res) => result.push(res[0]))
-    //   await tue.json().then((res) => result.push(res[0]))
-    //   await wed.json().then((res) => result.push(res[0]))
-    //   await thu.json().then((res) => result.push(res[0]))
-    //   await fri.json().then((res) => result.push(res[0]))
-    //   await sat.json().then((res) => result.push(res[0]))
-    //   await sun.json().then((res) => result.push(res[0]))
-    //   return result
-    // })
-    // .then((res) => {
-    //   setWeekDates(getWeekDates(dayOfTheWeek)) 
-    //   setWeekViewArr(res)
-    //   return res
-    // })
-    // .then((res) => {
-    //   for(let i = 0; i<res.length;i++){
-    //     if(res[i] == undefined){
-    //       res[i] = {}
-    //       res[i].name = "No workout yet"
-    //       res[i].date = new Date(weekDates[i]).toDateString()
-    //     }
-    //   }
-    // })
   },[])
 
   return (
@@ -123,10 +75,9 @@ export default function WeekView({ setView, date}) {
         direction='column'
         justifyContent='center'
         alignItems='center'
-        spacing={0.5}
+        spacing={5}
         marginTop="1rem"
       >
-        {/* // TODO add onClick to Item to setView to DayView obj.dayOfWeek */}
         {weekDates.map(obj => {
           return (
             <>
@@ -138,27 +89,14 @@ export default function WeekView({ setView, date}) {
                 }}
               >
               {obj}
-              {/* {`${daysOfTheWeek[obj.day_of_week] || ''} -  Workout: ${
-                obj.name || ''
-              }`} */}
               </Item>
-              <Button
-                onClick={() => {
-                  setView(
-                    <WorkoutUpdate
-                      setView={setView}
-                      initName={obj.name}
-                      workoutid={obj.id}
-                    ></WorkoutUpdate>
-                  );
-                }}
-              >
-                edit
-              </Button>
             </>
           );
         })}
       </Stack>
+      {<br></br>}
+      {<br></br>}
+      <Calendar date={date} setView={setView}/>
     </Box>
   );
 }

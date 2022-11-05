@@ -117,9 +117,9 @@ export default function DayView({ setView, date, setDate }) {
   return (
     <Fragment>
       <h2>{showDate}</h2>
-      <h2>{workoutName === undefined ? "No workout yet" : `Workout: ${workoutName}`}</h2>
+      <h2>{workoutName === undefined ? "No workout yet" : `Workout name: ${workoutName}`}</h2>
       <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 650 }} size="small" aria-label="a dense table">
+        <Table  size="small" aria-label="a dense table">
           <TableHead>
             <TableRow>
               <TableCell>Exercise</TableCell>
