@@ -45,15 +45,6 @@ function Calendar({ date, setView }) {
     setOpen(false);
   };
 
-  const handleMonthChange = async () => {
-    // just select random days to simulate server side based data
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        setSelectedDays([1, 2, 3].map(() => getRandomNumber(1, 28)));
-        resolve();
-      }, 1000);
-    });
-  };
 
   const SelectDate = (newValue) => {
     date = new Date(newValue).toDateString();
@@ -89,21 +80,6 @@ function Calendar({ date, setView }) {
               onChange={(newValue) => {
                 SelectDate(newValue);
               }}
-              renderDay={(
-                day,
-                selectedDate,
-                isInCurrentMonth,
-                dayComponent
-              ) => {
-                const isSelected =
-                  isInCurrentMonth && selectedDays.includes(day.getDate());
-                return (
-                  <Badge badgeContent={isSelected ? "🌚" : undefined}>
-                    {dayComponent}
-                  </Badge>
-                );
-              }}
-              onMonthChange={handleMonthChange}
             />
           </MuiPickersUtilsProvider>
         </Box>
