@@ -236,6 +236,7 @@ const Testing = {
     try{
       const { exerciseid } = req.params;
       const { completion } = req.body;
+      console.log(exerciseid, completion)
 
       if (exerciseid === undefined) {
         res.status(500).json({ message: ERROR_MSGS.INTERNAL_SERVER_ERROR });
@@ -243,7 +244,7 @@ const Testing = {
       };
 
       await knex("exercise")
-        .where({ id: exerciseid })
+        .where("id" ,"=" , exerciseid)
         .update({
           complete: completion
         });

@@ -173,7 +173,7 @@ function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date,
             {card.exercises[0].name}
           </Typography>
           <Typography variant="body2">
-            {card.exercises[0].description}
+            {card.exercises[0].description[0] == "<" ? card.exercises[0].description.substr(3,(card.exercises[0].description.length - 7)) : card.exercises[0].description}
           </Typography>
         </CardContent>
         <RenderMoreInfo setOpenParent={setOpenParent} card={card} date={date} setRows={setRows}/>
