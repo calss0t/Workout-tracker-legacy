@@ -5,7 +5,7 @@
 }
 
 .card {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     display: block;
     margin-inline: auto;
     padding-top: 10px;

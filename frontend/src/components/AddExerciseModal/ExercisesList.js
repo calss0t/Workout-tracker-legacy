@@ -5,8 +5,7 @@ import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
 import TextField from "@mui/material/TextField";
 import Stack from "@mui/material/Stack";
-import ImageListItem from '@mui/material/ImageListItem';
-
+import ImageListItem from "@mui/material/ImageListItem";
 
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
@@ -18,8 +17,8 @@ const style = {
   left: "50%",
   transform: "translate(-50%, -50%)",
   width: 300,
-  height:'100%',
-  overflow:'scroll',
+  height: "100%",
+  overflow: "scroll",
   bgcolor: "background.paper",
   border: "2px solid #000",
   boxShadow: 24,
@@ -28,7 +27,7 @@ const style = {
   pb: 3,
 };
 
-function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
+function RenderMoreInfo({ card, date, setOpenParent, setRows }) {
   const [open, setOpen] = React.useState(false);
 
   const [sets, setSets] = React.useState("");
@@ -44,33 +43,34 @@ function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
 
   const handleOpenChild = () => {
     setOpen(true);
-
   };
   const handleCloseChild = () => {
     setOpen(false);
   };
 
   function submit() {
-    setRows([])
+    setRows([]);
     const data = { name, sets, reps };
     (async () => {
-      const rawResponse = await fetch(`/testing/ex/${localStorage.getItem('userid')}/${date}`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: '*/*',
-          'Accept-Encoding': 'gzip, deflate, br',
-          Connection: 'keep-alive',
-          'Content-Length': 123,
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const rawResponse = await fetch(
+        `/testing/ex/${localStorage.getItem("userid")}/${date}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "*/*",
+            "Accept-Encoding": "gzip, deflate, br",
+            Connection: "keep-alive",
+            "Content-Length": 123,
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
       handleCloseChild();
-      setOpenParent(false)
+      setOpenParent(false);
     })();
   }
-
 
   return (
     <React.Fragment>
@@ -84,12 +84,17 @@ function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
       >
         <Box sx={{ ...style, width: 200 }}>
           <h2 id="child-modal-title">{card.exercises[0].name}</h2>
-          <p id="child-modal-description">{card.exercises[0].description}</p>
+          <p id="child-modal-description">
+            {card.exercises[0].description[0] == "<"
+              ? card.exercises[0].description.substr(
+                  3,
+                  card.exercises[0].description.length - 7
+                )
+              : card.exercises[0].description}
+          </p>
           {card.images.map((item) => (
             <ImageListItem key={item.img}>
-              <img
-                src={`${item.image}?w=164&h=164&fit=crop&auto=format`}
-              />
+              <img src={`${item.image}?w=164&h=164&fit=crop&auto=format`} />
             </ImageListItem>
           ))}
           <Stack
@@ -98,11 +103,7 @@ function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
             alignItems="center"
             spacing={0.5}
           >
-            <TextField
-              id='name'
-              label='Name'
-              value={card.exercises[0].name}
-            />
+            <TextField id="name" label="Name" value={card.exercises[0].name} />
             <TextField
               id="sets"
               label="Sets"
@@ -131,8 +132,13 @@ function RenderMoreInfo({ card, date, setOpenParent, setRows}) {
   );
 }
 
-function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date, setRows}) {
-  
+function ExercisesList({
+  exercises,
+  selectedBodyPart,
+  setSelectedBodyPart,
+  date,
+  setRows,
+}) {
   const [open, setOpenParent] = React.useState(false);
 
   React.useEffect(() => {
@@ -155,8 +161,8 @@ function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date,
     left: "50%",
     transform: "translate(-50%, -50%)",
     width: 350,
-    height:'100%',
-    overflow:'scroll',
+    height: "100%",
+    overflow: "scroll",
     bgcolor: "background.paper",
     border: "2px solid #000",
     boxShadow: 24,
@@ -173,10 +179,20 @@ function ExercisesList({ exercises, selectedBodyPart, setSelectedBodyPart, date,
             {card.exercises[0].name}
           </Typography>
           <Typography variant="body2">
-            {card.exercises[0].description}
+            {card.exercises[0].description[0] == "<"
+              ? card.exercises[0].description.substr(
+                  3,
+                  card.exercises[0].description.length - 7
+                )
+              : card.exercises[0].description}
           </Typography>
         </CardContent>
-        <RenderMoreInfo setOpenParent={setOpenParent} card={card} date={date} setRows={setRows}/>
+        <RenderMoreInfo
+          setOpenParent={setOpenParent}
+          card={card}
+          date={date}
+          setRows={setRows}
+        />
       </Card>
     );
   };

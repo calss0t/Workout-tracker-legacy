@@ -31,7 +31,7 @@ function getRandomNumber(min, max) {
   return Math.round(Math.random() * (max - min) + min);
 }
 
-function Calendar({ setDate, date, setView }) {
+function Calendar({ date, setView }) {
   const [selectedDate, handleDateChange] = useState(new Date());
   const [selectedDays, setSelectedDays] = useState([1, 2, 15]);
 

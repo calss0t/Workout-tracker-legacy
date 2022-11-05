@@ -36,6 +36,8 @@ export default function SignupModal({ setView }) {
   const [weight, setWeight] = React.useState('');
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
+  const [password2, setPassword2] = React.useState('');
+
 
   // user information state handlers
   function handleFirstName(e) {
@@ -56,31 +58,39 @@ export default function SignupModal({ setView }) {
   function handlePassword(e) {
     setPassword(e.target.value);
   }
+  function handlePassword2(e) {
+    setPassword2(e.target.value);
+  }
 
   // form submission
   function submit() {
-    if (isEmail(email)) {
-      const data = { email, password, firstName, lastName, height, weight };
-      (async () => {
-        const rawResponse = await fetch(`/user/signup`, {
-          method: 'POST',
-          mode: 'cors',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: '*/*',
-            'Accept-Encoding': 'gzip, deflate, br',
-            Connection: 'keep-alive',
-            'Content-Length': 123,
-          },
-          body: JSON.stringify(data),
-        });
-        const content = await rawResponse.json();
-        localStorage.setItem('token', content.token);
-        localStorage.setItem('userid', content.userid);
-        setView(<WeekView setView={setView}></WeekView>);
-      })();
-    } else {
-      alert('invalid email');
+    if(password !== password2){
+      alert("Looks like your passwrods don't match, please check again")
+    }
+    else {
+      if (isEmail(email)) {
+        const data = { email, password, firstName, lastName, height, weight };
+        (async () => {
+          const rawResponse = await fetch(`/user/signup`, {
+            method: 'POST',
+            mode: 'cors',
+            headers: {
+              'Content-Type': 'application/json',
+              Accept: '*/*',
+              'Accept-Encoding': 'gzip, deflate, br',
+              Connection: 'keep-alive',
+              'Content-Length': 123,
+            },
+            body: JSON.stringify(data),
+          });
+          const content = await rawResponse.json();
+          localStorage.setItem('token', content.token);
+          localStorage.setItem('userid', content.userid);
+          setView(<WeekView setView={setView}></WeekView>);
+        })();
+      } else {
+        alert('invalid email');
+      }
     }
   }
 
@@ -144,6 +154,15 @@ export default function SignupModal({ setView }) {
               autoComplete='current-password'
               value={password}
               onChange={handlePassword}
+            />
+            <TextField
+              required
+              id='password2'
+              label='Password'
+              type='password'
+              autoComplete='current-password'
+              value={password2}
+              onChange={handlePassword2}
             />
             <Button
               onClick={() => {

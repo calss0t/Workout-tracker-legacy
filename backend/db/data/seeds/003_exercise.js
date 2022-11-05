@@ -12,6 +12,7 @@ exports.seed = async function (knex) {
 			reps: "10",
 			break_time: "120",
 			workout_id: "1",
+			complete: true,
 		},
 		{
 			name: "pull up",
